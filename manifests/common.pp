@@ -36,6 +36,7 @@ class solr::common (
     exec { 'copy-to-solr.xml':
         command => "cp ${solr::params::conf}/solr.xml-stock ${solr::params::conf}/solr.xml",
         creates => "${solr::params::conf}/solr.xml",
+        require => File["${solr::params::conf}/solr.xml"],
     }
 
     file { [
