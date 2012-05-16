@@ -10,7 +10,7 @@
 #
 # $source:: The source of the file (use this OR content)
 #
-define solr::core::sharedconfig(
+define solr::core::sharedfile(
     $content = '',
     $source  = ''){
 
