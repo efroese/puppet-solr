@@ -2,7 +2,12 @@
 
 # Test if a solr core exists
 
-if [ -d "<%= scope.lookupvar('solr::params::data') %>/$name" ]; then
+if [ "$1" == "" ]; then
+    echo 'specify a name'
+    exit 1
+fi
+
+if [ -d "<%= scope.lookupvar('solr::params::data') %>/$1" ]; then
     exit 0
 else
     exit 1
