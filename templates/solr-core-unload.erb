@@ -15,6 +15,7 @@ fi
 
 if [ ! -d "<%= scope.lookupvar('solr::params::data') %>/$name" ]; then
     echo "Cannot unload $name: no core with that name exists"
-exit 1
+    exit 1
+fi
 
 curl "http://localhost:8080/solr/admin/cores?action=UNLOAD&name=${name}&deleteIndexes=${delete_indexes}"
