@@ -52,7 +52,8 @@ class solr::tomcat (
     class { 'solr::common':
        user       => $user,
        group      => $group,
-       solrconfig => $solrconfig,
+       solr_xml => $solr_xml,
+       solrconfig_xml => $solrconfig_xml,
        master_url => $master_url,
     }
 
