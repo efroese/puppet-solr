@@ -33,14 +33,14 @@ define solr::core(
     case $ensure {
 
         present : {
-            exec { "solr-core-create-$":
-                command => "/usr/sbin/solr-core-new ${name}",
+            exec { "solr-core-create-${name}":
+                command => "/usr/sbin/solr-core-create ${name}",
                 unless  => "/usr/sbin/solr-core-exists ${name}",
             }
         }
 
         unload : {
-            exec { "solr-core-unload-$":
+            exec { "solr-core-unload-${name/et  ini .   }":
                 command => "/usr/sbin/solr-core-unload ${name} ${delete_indexes}",
                 onlyif  => "/usr/sbin/solr-core-exists ${name}",
             }
