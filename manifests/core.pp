@@ -40,7 +40,7 @@ define solr::core(
         }
 
         unload : {
-            exec { "solr-core-unload-${name/et  ini .   }":
+            exec { "solr-core-unload-${name}":
                 command => "/usr/sbin/solr-core-unload ${name} ${delete_indexes}",
                 onlyif  => "/usr/sbin/solr-core-exists ${name}",
             }
