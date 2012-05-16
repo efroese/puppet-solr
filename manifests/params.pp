@@ -1,13 +1,15 @@
 class solr::params {
 
     # Data for each core
-    $data = '/var/lib/solr/data'
+    $var = '/var/lib/solr'
+    $data = "${var}/data"
     
     # solr config
-    $conf = '/etc/solr/conf'
+    $etc = '/etc/solr'
+    $conf = "${etc}/conf"
     
     # core config template
-    $conftemplate = '/etc/solr/conftemplate'
+    $conftemplate = "${etc}/conftemplate"
 
     $share = '/usr/share/solr'
 }

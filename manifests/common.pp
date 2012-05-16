@@ -39,20 +39,25 @@ class solr::common (
     }
 
     file { [
-        $solr::params::conf,
-        $solr::params::conftemplate,
-        $solr::params::share]:
+        $solr::params::etc,
+        $solr::params::share,
+        $solr::params::var,]:
+        ensure => directory,
+    }
+    
+    file { [$solr::params::conf, $solr::params::conftemplate,]:
         ensure => directory,
     }
 
-    file { solr::params::data:
+    file { $solr::params::data:
         ensure => directory,
         owner => $user,
         group => $group,
         mode => 755,
+        require => File[$solr::params::var]
     }
 
-    file { "${solr::params::conf}/conftemplate/solrconfig.xml":
+    file { "${solr::params::conftemplate}/solrconfig.xml":
         owner => $user,
         group => $group,
         mode  => 0644,
@@ -65,7 +70,7 @@ class solr::common (
         group => $group,
         mode  => 0644,
         content => template($solr_xml),
-        require => File["$solr::params::conf/conf"],
+        require => File["$solr::params::conf"],
     }
 
     # Core managemnent scripts
@@ -80,8 +85,8 @@ class solr::common (
             owner => root,
             group => root,
             mode => 0755;
-        '/usr/sbin/solr-core-exist':
-            content => template('solr/solr-core-exist.erb'),
+        '/usr/sbin/solr-core-exists':
+            content => template('solr/solr-core-exists.erb'),
             owner => root,
             group => root,
             mode => 0755;
