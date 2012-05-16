@@ -1,0 +1,20 @@
+#!/bin/bash
+
+# unload a new Solr core
+if [ "$1" == "" ]; then
+    echo -n "Name of core to unload: "
+    read name
+else
+    name=$1
+fi
+
+delete_indexes='false'
+if [ "$2" == "true" ]; then
+    delete_indexes='true'
+fi
+
+if [ ! -d "<%= scope.lookupvar('solr::params::data') %>/$name" ]; then
+    echo "Cannot unload $name: no core with that name exists"
+exit 1
+
+curl "http://localhost:8080/solr/admin/cores?action=UNLOAD&name=${name}&deleteIndexes=${delete_indexes}"

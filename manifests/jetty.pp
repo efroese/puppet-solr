@@ -4,11 +4,13 @@
 #
 # == Parameters:
 #
-# $solr_tarball:: See solr::common
+# $user:: The user solr will run as
 #
-# $solr_home_tarball:: See solr::common
+# $group:: The group solr will run as
 #
-# $solrconfig::   See solr::common
+# $solr_xml::   See solr::common
+#
+# $solrconfig_xml::   See solr::common
 #
 # $master_url::   See solr::common
 #
@@ -18,17 +20,15 @@
 # == Sample Usage:
 # 
 #   class { 'solr::jetty':
-#     solr_tarball => "http://source.sakaiproject.org/release/oae/solr/solr-example.tar.gz",
-#     solrconfig   => 'myconfig/solrconfig.xml.erb',
+#     solrconfig_xml => 'myconfig/solrconfig.xml.erb',
+#     master_url => 'http://solr.server:8080/solr'
 #   }
 #
 class solr::jetty(
-    $basedir           = '/usr/local/solr',
     $user              = 'root',
     $group             = 'root',
-    $solr_tarball      = "http://nodeload.github.com/sakaiproject/solr/tarball/master",
-    $solr_home_tarball = "http://dl.dropbox.com/u/24606888/puppet-oae-files/home0.tgz",
-    $solrconfig        = 'solr/solrconfig.xml.erb',
+    $solr_xml          = 'solr/solr.xml.erb',
+    $solrconfig_xml    = 'solr/solrconfig.xml.erb',
     $master_url        = 'set the master url' ) {
 
     # Make sure solr::common is executed BEFORE solr::jetty
@@ -36,13 +36,11 @@ class solr::jetty(
 
     # Lift heavy things
     class { 'solr::common':
-        basedir           => basedir,
-        user              => $user,
-        group             => $group,
-        solr_tarball      => $solr_git,
-        solr_home_tarball => $solr_home_tarball,
-        solrconfig        => $solrconfig,
-        master_url        => $master_url,
+        user           => $user,
+        group          => $group,
+        solr_xml       => $solr_xml,
+        solrconfig_xml => $solrconfig_xml,
+        master_url     => $master_url,
     }
 
     # Drop the init script
@@ -58,6 +56,5 @@ class solr::jetty(
     service { 'solr':
         ensure => running,
         enable => true,
-        subscribe => File["${solr_conf_dir}/solrconfig.xml"], 
     }
 }

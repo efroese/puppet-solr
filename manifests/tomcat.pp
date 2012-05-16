@@ -4,13 +4,9 @@
 #
 # == Parameters:
 #
-# $basedir:: See solr::common
+# $solr_xml::   See solr::common
 #
-# $solr_tarball:: See solr::common
-#
-# $solr_home_tarball:: See solr::common
-#
-# $solrconfig::   See solr::common
+# $solrconfig_xml::   See solr::common
 #
 # $master_url::   See solr::common
 #
@@ -30,21 +26,16 @@
 # == Sample Usage:
 # 
 #   class { 'solr::tomcat':
-#     solr_tarball => "http://source.sakaiproject.org/release/oae/solr/solr-example.tar.gz",
-#     solrconfig   => 'localconfig/solrconfig.xml.erb',
-#     schema       => 'localconfig/schema.xml.erb',
 #     tomcat_home  => '/usr/local/tomcat',
 #     tomcat_user  => 'tomcat',
 #     tomcat_group => 'tomcat',
 #   }
 #
 class solr::tomcat (
-    $basedir           = '/usr/local/solr',
     $user              = 'root',
     $group             = 'root',
-    $solr_tarball      = "http://nodeload.github.com/sakaiproject/solr/tarball/master",
-    $solr_home_tarball = "http://dl.dropbox.com/u/24606888/puppet-oae-files/home0.tgz",
-    $solrconfig        = 'solr/solrconfig.xml.erb',
+    $solr_xml          = 'solr/solr.xml.erb',
+    $solrconfig_xml    = 'solr/solrconfig.xml.erb',
     $master_url        = 'set the master url',
 	$tomcat_home,
     $tomcat_user,
@@ -59,19 +50,16 @@ class solr::tomcat (
 
     # Do the heavy lifting
     class { 'solr::common':
-       basedir           => $basedir,
-       user              => $user,
-       group             => $group,
-       solr_tarball      => $solr_tarball,
-       solr_home_tarball => $solr_home_tarball,
-       solrconfig        => $solrconfig,
-       master_url        => $master_url,
+       user       => $user,
+       group      => $group,
+       solrconfig => $solrconfig,
+       master_url => $master_url,
     }
 
     # Get thr solr war
     exec { 'download-war':
-        command => "curl -o ${solr::common::basedir}/solr.war ${webapp_url}",
-        creates => "${solr::common::basedir}/solr.war",
+        command => "curl -o ${solr::params::share}/solr.war ${webapp_url}",
+        creates => "${solr::params::share}/solr.war",
     }
 
     # Write out the webapp context file to tell tomcat about solr.
