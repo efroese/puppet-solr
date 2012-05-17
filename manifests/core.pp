@@ -37,7 +37,7 @@ define solr::core(
             exec { "solr-core-create-${name}":
                 command => "/usr/sbin/solr-core-create ${name}",
                 unless  => "/usr/sbin/solr-core-exists ${name}",
-                require => File["${solr::params::data}'/${name}"],
+                require => File["${solr::params::data}/${name}"],
             }
 
             file { "${solr::params::data}/${name}":
