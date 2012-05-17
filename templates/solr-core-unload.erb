@@ -19,3 +19,5 @@ if [ ! -d "<%= scope.lookupvar('solr::params::data') %>/$name" ]; then
 fi
 
 curl "http://localhost:8080/solr/admin/cores?action=UNLOAD&name=${name}&deleteIndexes=${delete_indexes}"
+
+exit $?

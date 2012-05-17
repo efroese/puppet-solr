@@ -18,5 +18,10 @@ chown <%= scope.lookupvar('solr::common::user') %>:<%= scope.lookupvar('solr::co
 
 mkdir -p <%= scope.lookupvar('solr::params::conf') %>/$name/conf
 cp -a <%= scope.lookupvar('solr::params::conftemplate') %>/* <%= scope.lookupvar('solr::params::conf') %>/$name/conf/
+chown -R <%= scope.lookupvar('solr::common::user') %>:<%= scope.lookupvar('solr::common::group') %> <%= scope.lookupvar('solr::params::conf') %>/$name
+
 sed -i "s/CORENAME/$name/" <%= scope.lookupvar('solr::params::conf') %>/$name/conf/solrconfig.xml
+
 curl "http://localhost:8080/solr/admin/cores?action=CREATE&name=$name&instanceDir=<%= scope.lookupvar('solr::params::conf') %>/$name"
+
+exit $?
