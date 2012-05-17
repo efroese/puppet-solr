@@ -38,7 +38,7 @@ define solr::core::sharedfile(
             owner => $solr::common::user,
             group => $solr::common::group,
             mode  => 0644,
-            content => $content,
+            source => $source,
         }
 
         # /etc/solr/conf/${name}
@@ -46,7 +46,7 @@ define solr::core::sharedfile(
             owner => $solr::common::user,
             group => $solr::common::group,
             mode  => 0644,
-            content => $content,
+            source => $source,
         }
     }
 
