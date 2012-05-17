@@ -15,25 +15,45 @@ If you want to use tomcat you can install tomcat with https://github.com/efroese
         require => Class['Tomcat6'],
     }
 
+    # Download the source tarball
+    # /usr/local/solr/solr-source
+    archive { 'solr-source':
+        ensure         => present,
+        url            => 'http://nodeload.github.com/sakaiproject/solr/tarball/org.sakaiproject.nakamura.solr-1.3-20120215',
+        checksum       => false,
+        target         => $localconfig::basedir,
+        src_target     => $localconfig::basedir,
+        allow_insecure => true,
+        timeout        => '0',
+        notify         => Exec['mv-solr-source'],
+    }
+
+    # The expanded folder name will be ${organization}-${repository}-${revision}
+    exec { 'mv-solr-source':
+        command => "mv ${localconfig::basedir}/`tar tf ${localconfig::basedir}/solr-source.tar.gz 2>/dev/null | head -1` ${localconfig::basedir}/solr-source",
+        refreshonly => true,
+    }
+
     solr::core::sharedfile {
         'schema.xml':
-            source => "/usr/local/deploy/solr/schema.xml";
-        'header.txt':
-            source => "/usr/local/deploy/solr/header.text";
+            source => "file://${localconfig::basedir}/solr-source/src/main/resources/schema.xml";
         'protwords.txt':
-            source => "/usr/local/deploy/solr/protwords.text";
+            source => "${localconfig::basedir}/solr-source/src/main/resources/protwords.txt";
         'stopwords.txt':
-            source => "/usr/local/deploy/solr/stopwords.text";
+            source => "${localconfig::basedir}/solr-source/src/main/resources/stopwords.txt";
         'synonyms.txt':
-            source => "/usr/local/deploy/solr/synonyms.text";
+            source => "${localconfig::basedir}/solr-source/src/main/resources/synonyms.txt";
     }
 
     solr::core { [ 'core0', 'core1', ]:
+        #ensure => unload,
+        #delete_indexes => true,
         require => [
             Class['Solr::Tomcat'],
             Solr::Core::Sharedfile['schema.xml'],
-            Solr::Core::Sharedfile['stopwords.txt'],
             Solr::Core::Sharedfile['protwords.txt'],
+            Solr::Core::Sharedfile['stopwords.txt'],
+            Solr::Core::Sharedfile['synonyms.txt'],
         ]
     }
     
