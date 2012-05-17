@@ -18,6 +18,6 @@ if [ ! -d "<%= scope.lookupvar('solr::params::data') %>/$name" ]; then
     exit 1
 fi
 
-curl "http://localhost:8080/solr/admin/cores?action=UNLOAD&name=${name}&deleteIndexes=${delete_indexes}"
+curl -q -f "http://localhost:8080/solr/admin/cores?action=UNLOAD&name=${name}&deleteIndexes=${delete_indexes}"
 
 exit $?

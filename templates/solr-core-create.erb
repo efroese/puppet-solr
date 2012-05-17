@@ -8,13 +8,12 @@ else
     name=$1
 fi
 
-if [ -d "<%= scope.lookupvar('solr::params::data') %>/$name" ]; then
+/usr/sbin/solr-core-exists $name
+
+if [ $? == 0 ]; then
     echo "Cannot create $name: core with same name already exists"
     exit 1
 fi
-
-mkdir <%= scope.lookupvar('solr::params::data') %>/$name
-chown <%= scope.lookupvar('solr::common::user') %>:<%= scope.lookupvar('solr::common::group') %> <%= scope.lookupvar('solr::params::data') %>/$name
 
 mkdir -p <%= scope.lookupvar('solr::params::conf') %>/$name/conf
 cp -a <%= scope.lookupvar('solr::params::conftemplate') %>/* <%= scope.lookupvar('solr::params::conf') %>/$name/conf/
