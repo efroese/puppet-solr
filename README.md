@@ -38,11 +38,11 @@ If you want to use tomcat you can install tomcat with https://github.com/efroese
         'schema.xml':
             source => "file://${localconfig::basedir}/solr-source/src/main/resources/schema.xml";
         'protwords.txt':
-            source => "${localconfig::basedir}/solr-source/src/main/resources/protwords.txt";
+            source => "file://${localconfig::basedir}/solr-source/src/main/resources/protwords.txt";
         'stopwords.txt':
-            source => "${localconfig::basedir}/solr-source/src/main/resources/stopwords.txt";
+            source => "file://${localconfig::basedir}/solr-source/src/main/resources/stopwords.txt";
         'synonyms.txt':
-            source => "${localconfig::basedir}/solr-source/src/main/resources/synonyms.txt";
+            source => "file://${localconfig::basedir}/solr-source/src/main/resources/synonyms.txt";
     }
 
     solr::core { [ 'core0', 'core1', ]:
